@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "file": "c:\\prWebProject\\src\\index.html",
+            "name": "Open index.html",
+            "request": "launch",
+            "type": "chrome"
+        }
+    ],
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0"
+}
