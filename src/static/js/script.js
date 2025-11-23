@@ -15,11 +15,13 @@ function prikaziPodatke() {
   const odeljenjeID = document.getElementById("odeljenjeSelect").value;
   const odeljenje = podaci.odeljenja.find((od) => od.id == odeljenjeID);
   prikaziTabelu(odeljenje);
+  dodajPromenljivost();
 
   document.getElementById("odeljenjeSelect").onchange = () => {
     const odeljenjeID = document.getElementById("odeljenjeSelect").value;
     const odeljenje = podaci.odeljenja.find((od) => od.id == odeljenjeID);
     prikaziTabelu(odeljenje);
+    dodajPromenljivost();
   };
 }
 
@@ -76,9 +78,11 @@ function prikaziTabelu(odeljenje) {
       const cas = sviCasovi.find((c) => c.cas === casBroj);
 
       if (cas) {
-        html += `<td><b>${cas.predmet}</b></td>`;
+        html += `<td class="promenljivo" style='background-color:${
+          boje[cas.predmet.toLowerCase().replace(" ", "")]
+        }'>${cas.predmet}</td>`;
       } else {
-        html += `<td class="nista"></td>`;
+        html += `<td class="nista promenljivo"></td>`;
       }
     });
 
@@ -91,6 +95,35 @@ function prikaziTabelu(odeljenje) {
     `;
 
   tabela.innerHTML = html;
+}
+
+function dodajPromenljivost() {
+  document.querySelectorAll(".promenljivo").forEach((cell) => {
+    cell.addEventListener("click", function () {
+      const oldValue = this.textContent.trim();
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = oldValue;
+      input.className = "inline-editor";
+
+      this.textContent = "";
+      this.appendChild(input);
+      input.focus();
+
+      const finish = () => {
+        const newValue = input.value.trim();
+        this.textContent = newValue; //|| oldValue;
+        this.style.backgroundColor =
+          boje[newValue.toLowerCase().replace(" ", "")] || "#fafafa";
+      };
+
+      input.addEventListener("blur", finish);
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") finish();
+      });
+    });
+  });
 }
 
 function dodajCas() {}
@@ -112,6 +145,18 @@ function primeniTemu() {
 }
 
 let dodatniCasovi = JSON.parse(localStorage.getItem("dodatniCasovi")) || [];
+const boje = {
+  matematika: "pink",
+  srpskijezik: "lime",
+  engleskijezik: "brown",
+  primenaracunara: "orange",
+  bazepodataka: "red",
+  oop: "lightblue",
+  programiranje: "blue",
+  fizicko: "yellow",
+  geografija: "rosybrown",
+  likovno: "cyan",
+};
 const podaci = {
   odeljenja: [
     {
@@ -120,11 +165,11 @@ const podaci = {
       raspored: {
         ponedeljak: [
           { cas: 1, predmet: "matematika" },
-          { cas: 2, predmet: "engleski" },
+          { cas: 2, predmet: "engleski jezik" },
           { cas: 3, predmet: "primena racunara" },
         ],
         utorak: [
-          { cas: 1, predmet: "srpski" },
+          { cas: 1, predmet: "srpski jezik" },
           { cas: 2, predmet: "programiranje" },
         ],
       },

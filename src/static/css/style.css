@@ -92,3 +92,13 @@ body.dark .raspored-tabela .nista {
 body.dark .raspored-tabela tbody tr:nth-child(even) {
   background: #383838;
 }
+
+.promenljivo {
+  font-weight: bold;
+}
+
+input.inline-editor {
+  width: 73%;
+  font-size: 16px;
+  box-sizing: border-box;
+}
