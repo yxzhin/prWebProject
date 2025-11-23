@@ -53,3 +53,42 @@ body.dark nav button {
 body.dark footer {
   color: #222;
 }
+
+.raspored-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.raspored-tabela th,
+.raspored-tabela td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  min-width: 120px;
+}
+
+.raspored-tabela th {
+  background: #ff4545;
+  color: white;
+}
+
+body.dark .raspored-tabela th {
+  background: #333;
+}
+
+.raspored-tabela .prazno {
+  background: #f0f0f0;
+}
+
+body.dark .raspored-tabela .prazno {
+  background: #444;
+}
+
+.raspored-tabela tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+body.dark .raspored-tabela tbody tr:nth-child(even) {
+  background: #383838;
+}
