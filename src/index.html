@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +8,21 @@
     <link rel="icon" href="./static/img/favicon.png?v=2" type="image/x-icon" />
   </head>
   <body>
-    <h1>prWebProject</h1>
+    <header>
+      <h1>raspored casova</h1>
+      <nav>
+        <button onclick="prikaziPodatke()">prikazi podatke</button>
+        <button onclick="dodajCas()">dodaj cas</button>
+        <button onclick="pretraga()">pretraga</button>
+        <button onclick="promeniTemu()">tema</button>
+      </nav>
+    </header>
+    <main id="raspored">
+      <!-- dinamicki se menja -->
+    </main>
+    <footer>
+      <p>with &lt;3 by &commat;yxzhin ^^</p>
+    </footer>
+    <script src="./static/js/script.js"></script>
   </body>
-  <script src="./static/js/script.js"></script>
 </html>
