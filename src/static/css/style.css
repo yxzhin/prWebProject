@@ -77,11 +77,11 @@ body.dark .raspored-tabela th {
   background: #333;
 }
 
-.raspored-tabela .prazno {
+.raspored-tabela .nista {
   background: #f0f0f0;
 }
 
-body.dark .raspored-tabela .prazno {
+body.dark .raspored-tabela .nista {
   background: #444;
 }
 
