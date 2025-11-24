@@ -4,7 +4,7 @@ window.onload = () => {
   prikaziPodatke();
 };
 
-let dodatniCasovi = JSON.parse(localStorage.getItem("dodatniCasovi")) || [];
+//let dodatniCasovi = JSON.parse(localStorage.getItem("dodatniCasovi")) || [];
 const boje = {
   matematika: "pink",
   srpskijezik: "lime",
@@ -16,6 +16,12 @@ const boje = {
   fizicko: "yellow",
   geografija: "rosybrown",
   likovno: "cyan",
+  biologija: "gray",
+  fizika: "lightgreen",
+  cos: "green",
+  gradjansko: "purple",
+  diskretnamatematika: "darkblue",
+  ostalo: "magenta",
 };
 const vremena = {
   1: {
@@ -65,8 +71,8 @@ function ucitajPodatke() {
             { cas: 7, predmet: "" },
           ],
           sreda: [
-            { cas: 1, predmet: "" },
-            { cas: 2, predmet: "" },
+            { cas: 1, predmet: "cos" },
+            { cas: 2, predmet: "biologija" },
             { cas: 3, predmet: "" },
             { cas: 4, predmet: "" },
             { cas: 5, predmet: "" },
@@ -76,15 +82,15 @@ function ucitajPodatke() {
           cetvrtak: [
             { cas: 1, predmet: "" },
             { cas: 2, predmet: "" },
-            { cas: 3, predmet: "" },
+            { cas: 3, predmet: "diskretna matematika" },
             { cas: 4, predmet: "" },
             { cas: 5, predmet: "" },
             { cas: 6, predmet: "" },
-            { cas: 7, predmet: "" },
+            { cas: 7, predmet: "gradjansko" },
           ],
           petak: [
             { cas: 1, predmet: "" },
-            { cas: 2, predmet: "" },
+            { cas: 2, predmet: "fizika" },
             { cas: 3, predmet: "" },
             { cas: 4, predmet: "" },
             { cas: 5, predmet: "" },
@@ -223,7 +229,7 @@ function prikaziTabelu(smena) {
   // popunjavanje redova
   for (let casBroj = 1; casBroj <= maxCasova; casBroj++) {
     const vreme = vremena[smena.id][casBroj];
-    html += `<tr><td>${casBroj} (${vreme})</td>`;
+    html += `<tr><td>${casBroj}. (${vreme})</td>`;
 
     dani.forEach((dan) => {
       const sviCasovi = smena.raspored[dan];
@@ -237,11 +243,11 @@ function prikaziTabelu(smena) {
 
       const cas = sviCasovi.find((c) => c.cas === casBroj);
       const id = `${dan}-${casBroj}`;
-      const tema = localStorage.getItem("tema") === "dark" ? "#444" : "#f0f0f0";
+      let tema = localStorage.getItem("tema") === "dark" ? "#444" : "#f0f0f0";
+      const cistNaziv = cas.predmet.toLowerCase().trim().replaceAll(" ", "");
+      tema = cistNaziv == "" ? tema : boje["ostalo"];
       const backgroundColor =
-        cas != null && cas.predmet.toLowerCase().trim().replace(" ", "") in boje
-          ? boje[cas.predmet.toLowerCase().trim().replace(" ", "")]
-          : tema;
+        cas != null && cistNaziv in boje ? boje[cistNaziv] : tema;
       const predmet = cas != null ? cas.predmet : "";
       html += `<td class="promenljivo" id=${id} style='background-color:${backgroundColor}'>${predmet}</td>`;
       /*
@@ -278,12 +284,13 @@ function dodajPromenljivost() {
       input.focus();
 
       const finish = () => {
-        const newValue = input.value.trim();
-        this.textContent = newValue.toLowerCase().trim().replace(" ", ""); //|| oldValue;
-        const tema =
-          localStorage.getItem("tema") === "dark" ? "#444" : "#f0f0f0";
+        const newValue = input.value;
+        this.textContent = newValue.toLowerCase().trim(); //|| oldValue;
+        let tema = localStorage.getItem("tema") === "dark" ? "#444" : "#f0f0f0";
+        const cistNaziv = this.textContent.replaceAll(" ", "");
+        tema = cistNaziv == "" ? tema : boje["ostalo"];
         this.style.backgroundColor =
-          boje[newValue.toLowerCase().trim().replace(" ", "")] || tema;
+          boje[newValue.toLowerCase().trim().replaceAll(" ", "")] || tema;
         const smenaID = localStorage.getItem("smenaID");
         const smenaIndex = podaci.smene.indexOf(
           podaci.smene.find((od) => od.id == smenaID)
@@ -304,8 +311,7 @@ function dodajPromenljivost() {
         }
         podaci.smene[smenaIndex].raspored[dan][casBroj - 1].predmet = newValue
           .toLowerCase()
-          .trim()
-          .replace(" ", "");
+          .trim();
         localStorage.setItem("podaci", JSON.stringify(podaci));
         /*if (
           "predmet" in podaci.smene[smenaIndex].raspored[dan][casBroj]
@@ -328,9 +334,11 @@ function dodajPromenljivost() {
   });
 }
 
+/*
 function dodajCas() {}
 
 function pretraga() {}
+*/
 
 function promeniTemu() {
   document.body.classList.toggle("dark");
