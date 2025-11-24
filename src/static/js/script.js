@@ -1,7 +1,61 @@
 window.onload = () => {
   primeniTemu();
+  ucitajPodatke();
   prikaziPodatke();
 };
+
+let dodatniCasovi = JSON.parse(localStorage.getItem("dodatniCasovi")) || [];
+const boje = {
+  matematika: "pink",
+  srpskijezik: "lime",
+  engleskijezik: "brown",
+  primenaracunara: "orange",
+  bazepodataka: "red",
+  oop: "lightblue",
+  programiranje: "blue",
+  fizicko: "yellow",
+  geografija: "rosybrown",
+  likovno: "cyan",
+};
+let podaci = null;
+
+function ucitajPodatke() {
+  podaci = JSON.parse(localStorage.getItem("podaci")) || {
+    odeljenja: [
+      {
+        id: 1,
+        naziv: "III-3",
+        raspored: {
+          ponedeljak: [
+            { cas: 1, predmet: "matematika" },
+            { cas: 2, predmet: "engleski jezik" },
+            { cas: 3, predmet: "primena racunara" },
+          ],
+          utorak: [
+            { cas: 1, predmet: "srpski jezik" },
+            { cas: 2, predmet: "programiranje" },
+          ],
+        },
+      },
+      {
+        id: 2,
+        naziv: "II-2",
+        raspored: {
+          ponedeljak: [
+            { cas: 1, predmet: "likovno" },
+            { cas: 2, predmet: "oop" },
+          ],
+          utorak: [
+            { cas: 1, predmet: "fizicko" },
+            { cas: 2, predmet: "geografija" },
+          ],
+        },
+      },
+    ],
+  };
+}
+
+function resetujPodatke() {}
 
 function prikaziPodatke() {
   const raspored = document.getElementById("raspored");
@@ -12,13 +66,15 @@ function prikaziPodatke() {
     `;
   popuniOdeljenja();
 
-  const odeljenjeID = document.getElementById("odeljenjeSelect").value;
+  const odeljenjeSelect = document.getElementById("odeljenjeSelect");
+  const odeljenjeID = odeljenjeSelect.value;
   const odeljenje = podaci.odeljenja.find((od) => od.id == odeljenjeID);
   prikaziTabelu(odeljenje);
   dodajPromenljivost();
 
-  document.getElementById("odeljenjeSelect").onchange = () => {
-    const odeljenjeID = document.getElementById("odeljenjeSelect").value;
+  odeljenjeSelect.onchange = () => {
+    const odeljenjeID = odeljenjeSelect.value;
+    localStorage.setItem("odeljenjeID", odeljenjeID);
     const odeljenje = podaci.odeljenja.find((od) => od.id == odeljenjeID);
     prikaziTabelu(odeljenje);
     dodajPromenljivost();
@@ -33,6 +89,9 @@ function popuniOdeljenja() {
         `<option value="${odeljenje.id}">${odeljenje.naziv}</option>`
     )
     .join("");
+  if (localStorage.getItem("odeljenjeID")) {
+    odeljenjeSelect.value = localStorage.getItem("odeljenjeID");
+  }
 }
 
 function prikaziTabelu(odeljenje) {
@@ -76,13 +135,14 @@ function prikaziTabelu(odeljenje) {
       ];
 
       const cas = sviCasovi.find((c) => c.cas === casBroj);
+      const id = `${dan}-${casBroj}`;
 
       if (cas) {
-        html += `<td class="promenljivo" style='background-color:${
+        html += `<td class="promenljivo" id=${id} style='background-color:${
           boje[cas.predmet.toLowerCase().replace(" ", "")]
         }'>${cas.predmet}</td>`;
       } else {
-        html += `<td class="nista promenljivo"></td>`;
+        html += `<td class="nista promenljivo" id=${id}></td>`;
       }
     });
 
@@ -116,6 +176,16 @@ function dodajPromenljivost() {
         this.textContent = newValue; //|| oldValue;
         this.style.backgroundColor =
           boje[newValue.toLowerCase().replace(" ", "")] || "#fafafa";
+        const odeljenjeID = localStorage.getItem("odeljenjeID");
+        const odeljenjeIndex = podaci.odeljenja.indexOf(
+          podaci.odeljenja.find((od) => od.id == odeljenjeID)
+        );
+        const splt = this.id.split("-");
+        const dan = splt[0];
+        const casBroj = splt[1] - 1;
+        podaci.odeljenja[odeljenjeIndex].raspored[dan][casBroj].predmet =
+          newValue;
+        localStorage.setItem("podaci", JSON.stringify(podaci));
       };
 
       input.addEventListener("blur", finish);
@@ -143,50 +213,3 @@ function primeniTemu() {
     document.body.classList.add("dark");
   }
 }
-
-let dodatniCasovi = JSON.parse(localStorage.getItem("dodatniCasovi")) || [];
-const boje = {
-  matematika: "pink",
-  srpskijezik: "lime",
-  engleskijezik: "brown",
-  primenaracunara: "orange",
-  bazepodataka: "red",
-  oop: "lightblue",
-  programiranje: "blue",
-  fizicko: "yellow",
-  geografija: "rosybrown",
-  likovno: "cyan",
-};
-const podaci = {
-  odeljenja: [
-    {
-      id: 1,
-      naziv: "III-3",
-      raspored: {
-        ponedeljak: [
-          { cas: 1, predmet: "matematika" },
-          { cas: 2, predmet: "engleski jezik" },
-          { cas: 3, predmet: "primena racunara" },
-        ],
-        utorak: [
-          { cas: 1, predmet: "srpski jezik" },
-          { cas: 2, predmet: "programiranje" },
-        ],
-      },
-    },
-    {
-      id: 2,
-      naziv: "II-2",
-      raspored: {
-        ponedeljak: [
-          { cas: 1, predmet: "likovno" },
-          { cas: 2, predmet: "oop" },
-        ],
-        utorak: [
-          { cas: 1, predmet: "fizicko" },
-          { cas: 2, predmet: "geografija" },
-        ],
-      },
-    },
-  ],
-};
