@@ -21,33 +21,106 @@ let podaci = null;
 
 function ucitajPodatke() {
   podaci = JSON.parse(localStorage.getItem("podaci")) || {
-    odeljenja: [
+    smene: [
       {
         id: 1,
-        naziv: "III-3",
+        naziv: "1. smena",
         raspored: {
           ponedeljak: [
             { cas: 1, predmet: "matematika" },
             { cas: 2, predmet: "engleski jezik" },
             { cas: 3, predmet: "primena racunara" },
+            { cas: 4, predmet: "" },
+            { cas: 5, predmet: "" },
+            { cas: 6, predmet: "" },
+            { cas: 7, predmet: "" },
           ],
           utorak: [
             { cas: 1, predmet: "srpski jezik" },
             { cas: 2, predmet: "programiranje" },
+            { cas: 3, predmet: "" },
+            { cas: 4, predmet: "" },
+            { cas: 5, predmet: "" },
+            { cas: 6, predmet: "" },
+            { cas: 7, predmet: "" },
+          ],
+          sreda: [
+            { cas: 1, predmet: "" },
+            { cas: 2, predmet: "" },
+            { cas: 3, predmet: "" },
+            { cas: 4, predmet: "" },
+            { cas: 5, predmet: "" },
+            { cas: 6, predmet: "" },
+            { cas: 7, predmet: "" },
+          ],
+          cetvrtak: [
+            { cas: 1, predmet: "" },
+            { cas: 2, predmet: "" },
+            { cas: 3, predmet: "" },
+            { cas: 4, predmet: "" },
+            { cas: 5, predmet: "" },
+            { cas: 6, predmet: "" },
+            { cas: 7, predmet: "" },
+          ],
+          petak: [
+            { cas: 1, predmet: "" },
+            { cas: 2, predmet: "" },
+            { cas: 3, predmet: "" },
+            { cas: 4, predmet: "" },
+            { cas: 5, predmet: "" },
+            { cas: 6, predmet: "" },
+            { cas: 7, predmet: "" },
           ],
         },
       },
       {
         id: 2,
-        naziv: "II-2",
+        naziv: "2. smena",
         raspored: {
           ponedeljak: [
             { cas: 1, predmet: "likovno" },
             { cas: 2, predmet: "oop" },
+            { cas: 3, predmet: "" },
+            { cas: 4, predmet: "" },
+            { cas: 5, predmet: "" },
+            { cas: 6, predmet: "" },
+            { cas: 7, predmet: "" },
           ],
           utorak: [
             { cas: 1, predmet: "fizicko" },
             { cas: 2, predmet: "geografija" },
+            { cas: 3, predmet: "" },
+            { cas: 4, predmet: "" },
+            { cas: 5, predmet: "" },
+            { cas: 6, predmet: "" },
+            { cas: 7, predmet: "" },
+          ],
+          sreda: [
+            { cas: 1, predmet: "" },
+            { cas: 2, predmet: "" },
+            { cas: 3, predmet: "" },
+            { cas: 4, predmet: "" },
+            { cas: 5, predmet: "" },
+            { cas: 6, predmet: "" },
+            { cas: 7, predmet: "" },
+          ],
+          cetvrtak: [
+            { cas: 1, predmet: "" },
+            { cas: 2, predmet: "" },
+            { cas: 3, predmet: "" },
+            { cas: 4, predmet: "" },
+            { cas: 5, predmet: "" },
+            { cas: 6, predmet: "" },
+            { cas: 7, predmet: "" },
+          ],
+          petak: [
+            { cas: 1, predmet: "" },
+            { cas: 2, predmet: "" },
+            { cas: 3, predmet: "" },
+            { cas: 4, predmet: "" },
+            { cas: 5, predmet: "" },
+            { cas: 6, predmet: "" },
+            { cas: 7, predmet: "" },
           ],
         },
       },
@@ -65,56 +138,53 @@ function resetujPodatke() {
 function prikaziPodatke() {
   const raspored = document.getElementById("raspored");
   raspored.innerHTML = `
-        <label>izaberite odeljenje:</label>
-        <select id="odeljenjeSelect"></select>
+        <label>izaberite smenu:</label>
+        <select id="smenaSelect"></select>
         <div id="tabela"></div>
     `;
-  popuniOdeljenja();
+  popunismene();
 
-  const odeljenjeSelect = document.getElementById("odeljenjeSelect");
-  const odeljenjeID = odeljenjeSelect.value;
-  localStorage.setItem("odeljenjeID", odeljenjeID);
-  const odeljenje = podaci.odeljenja.find((od) => od.id == odeljenjeID);
-  prikaziTabelu(odeljenje);
+  const smenaSelect = document.getElementById("smenaSelect");
+  const smenaID = smenaSelect.value;
+  localStorage.setItem("smenaID", smenaID);
+  const smena = podaci.smene.find((od) => od.id == smenaID);
+  prikaziTabelu(smena);
   dodajPromenljivost();
 
-  odeljenjeSelect.onchange = () => {
-    const odeljenjeID = odeljenjeSelect.value;
-    localStorage.setItem("odeljenjeID", odeljenjeID);
-    const odeljenje = podaci.odeljenja.find((od) => od.id == odeljenjeID);
-    prikaziTabelu(odeljenje);
+  smenaSelect.onchange = () => {
+    const smenaID = smenaSelect.value;
+    localStorage.setItem("smenaID", smenaID);
+    const smena = podaci.smene.find((od) => od.id == smenaID);
+    prikaziTabelu(smena);
     dodajPromenljivost();
   };
 }
 
-function popuniOdeljenja() {
-  const odeljenjeSelect = document.getElementById("odeljenjeSelect");
-  odeljenjeSelect.innerHTML = podaci.odeljenja
-    .map(
-      (odeljenje) =>
-        `<option value="${odeljenje.id}">${odeljenje.naziv}</option>`
-    )
+function popunismene() {
+  const smenaSelect = document.getElementById("smenaSelect");
+  smenaSelect.innerHTML = podaci.smene
+    .map((smena) => `<option value="${smena.id}">${smena.naziv}</option>`)
     .join("");
-  if (localStorage.getItem("odeljenjeID")) {
-    odeljenjeSelect.value = localStorage.getItem("odeljenjeID");
+  if (localStorage.getItem("smenaID")) {
+    smenaSelect.value = localStorage.getItem("smenaID");
   }
 }
 
-function prikaziTabelu(odeljenje) {
+function prikaziTabelu(smena) {
   const tabela = document.getElementById("tabela");
-  const dani = Object.keys(odeljenje.raspored);
+  const dani = Object.keys(smena.raspored);
 
   // pronaci maksimalan broj casova
   let maxCasova = 0;
   dani.forEach((dan) => {
     /*
-    const regularni = odeljenje.raspored[dan].length;
+    const regularni = smena.raspored[dan].length;
     const dodatni = dodatniCasovi.filter(
-      (cas) => cas.odeljenje === odeljenje.id && cas.dan === dan
+      (cas) => cas.smena === smena.id && cas.dan === dan
     ).length;
     const ukupno = regularni + dodatni;
     */
-    const ukupno = odeljenje.raspored[dan].length;
+    const ukupno = smena.raspored[dan].length;
     if (ukupno > maxCasova) maxCasova = ukupno;
   });
 
@@ -135,11 +205,11 @@ function prikaziTabelu(odeljenje) {
     html += `<tr><td>${casBroj}</td>`;
 
     dani.forEach((dan) => {
-      const sviCasovi = odeljenje.raspored[dan];
+      const sviCasovi = smena.raspored[dan];
       /*const sviCasovi = [
-        ...odeljenje.raspored[dan],
+        ...smena.raspored[dan],
         ...dodatniCasovi.filter(
-          (cas) => cas.odeljenje === odeljenje.id && cas.dan === dan
+          (cas) => cas.smena === smena.id && cas.dan === dan
         ),
       ];
       */
@@ -148,8 +218,8 @@ function prikaziTabelu(odeljenje) {
       const id = `${dan}-${casBroj}`;
       const tema = localStorage.getItem("tema") === "dark" ? "#444" : "#f0f0f0";
       const backgroundColor =
-        cas != null && cas.predmet.toLowerCase().replace(" ", "") in boje
-          ? boje[cas.predmet.toLowerCase().replace(" ", "")]
+        cas != null && cas.predmet.toLowerCase().trim().replace(" ", "") in boje
+          ? boje[cas.predmet.toLowerCase().trim().replace(" ", "")]
           : tema;
       const predmet = cas != null ? cas.predmet : "";
       html += `<td class="promenljivo" id=${id} style='background-color:${backgroundColor}'>${predmet}</td>`;
@@ -188,40 +258,41 @@ function dodajPromenljivost() {
 
       const finish = () => {
         const newValue = input.value.trim();
-        this.textContent = newValue; //|| oldValue;
+        this.textContent = newValue.toLowerCase().trim().replace(" ", ""); //|| oldValue;
         const tema =
           localStorage.getItem("tema") === "dark" ? "#444" : "#f0f0f0";
         this.style.backgroundColor =
-          boje[newValue.toLowerCase().replace(" ", "")] || tema;
-        const odeljenjeID = localStorage.getItem("odeljenjeID");
-        const odeljenjeIndex = podaci.odeljenja.indexOf(
-          podaci.odeljenja.find((od) => od.id == odeljenjeID)
+          boje[newValue.toLowerCase().trim().replace(" ", "")] || tema;
+        const smenaID = localStorage.getItem("smenaID");
+        const smenaIndex = podaci.smene.indexOf(
+          podaci.smene.find((od) => od.id == smenaID)
         );
         const splt = this.id.split("-");
         const dan = splt[0];
         const casBroj = Number(splt[1]);
 
-        ukupniBrojCasova =
-          podaci.odeljenja[odeljenjeIndex].raspored[dan].length;
+        ukupniBrojCasova = podaci.smene[smenaIndex].raspored[dan].length;
 
         if (casBroj > ukupniBrojCasova) {
           for (let i = 0; i < casBroj - ukupniBrojCasova; i++) {
-            podaci.odeljenja[odeljenjeIndex].raspored[dan][casBroj - 1] = {
+            podaci.smene[smenaIndex].raspored[dan][casBroj - 1] = {
               cas: casBroj,
               predmet: "",
             };
           }
         }
-        podaci.odeljenja[odeljenjeIndex].raspored[dan][casBroj - 1].predmet =
-          newValue;
+        podaci.smene[smenaIndex].raspored[dan][casBroj - 1].predmet = newValue
+          .toLowerCase()
+          .trim()
+          .replace(" ", "");
         localStorage.setItem("podaci", JSON.stringify(podaci));
         /*if (
-          "predmet" in podaci.odeljenja[odeljenjeIndex].raspored[dan][casBroj]
+          "predmet" in podaci.smene[smenaIndex].raspored[dan][casBroj]
         ) {
-          podaci.odeljenja[odeljenjeIndex].raspored[dan][casBroj].predmet =
+          podaci.smene[smenaIndex].raspored[dan][casBroj].predmet =
             newValue;
         } else {
-          podaci.odeljenja[odeljenjeIndex].raspored[dan][casBroj] = {
+          podaci.smene[smenaIndex].raspored[dan][casBroj] = {
             predmet: newValue,
             cas: casBroj,
           };
