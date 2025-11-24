@@ -53,9 +53,14 @@ function ucitajPodatke() {
       },
     ],
   };
+  localStorage.setItem("podaci", JSON.stringify(podaci));
 }
 
-function resetujPodatke() {}
+function resetujPodatke() {
+  localStorage.clear();
+  ucitajPodatke();
+  prikaziPodatke();
+}
 
 function prikaziPodatke() {
   const raspored = document.getElementById("raspored");
@@ -68,6 +73,7 @@ function prikaziPodatke() {
 
   const odeljenjeSelect = document.getElementById("odeljenjeSelect");
   const odeljenjeID = odeljenjeSelect.value;
+  localStorage.setItem("odeljenjeID", odeljenjeID);
   const odeljenje = podaci.odeljenja.find((od) => od.id == odeljenjeID);
   prikaziTabelu(odeljenje);
   dodajPromenljivost();
