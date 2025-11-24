@@ -107,12 +107,14 @@ function prikaziTabelu(odeljenje) {
   // pronaci maksimalan broj casova
   let maxCasova = 0;
   dani.forEach((dan) => {
+    /*
     const regularni = odeljenje.raspored[dan].length;
     const dodatni = dodatniCasovi.filter(
       (cas) => cas.odeljenje === odeljenje.id && cas.dan === dan
     ).length;
     const ukupno = regularni + dodatni;
-
+    */
+    const ukupno = odeljenje.raspored[dan].length;
     if (ukupno > maxCasova) maxCasova = ukupno;
   });
 
@@ -133,12 +135,14 @@ function prikaziTabelu(odeljenje) {
     html += `<tr><td>${casBroj}</td>`;
 
     dani.forEach((dan) => {
-      const sviCasovi = [
+      const sviCasovi = odeljenje.raspored[dan];
+      /*const sviCasovi = [
         ...odeljenje.raspored[dan],
         ...dodatniCasovi.filter(
           (cas) => cas.odeljenje === odeljenje.id && cas.dan === dan
         ),
       ];
+      */
 
       const cas = sviCasovi.find((c) => c.cas === casBroj);
       const id = `${dan}-${casBroj}`;
@@ -188,10 +192,33 @@ function dodajPromenljivost() {
         );
         const splt = this.id.split("-");
         const dan = splt[0];
-        const casBroj = splt[1] - 1;
-        podaci.odeljenja[odeljenjeIndex].raspored[dan][casBroj].predmet =
+        const casBroj = Number(splt[1]);
+
+        ukupniBrojCasova =
+          podaci.odeljenja[odeljenjeIndex].raspored[dan].length;
+
+        if (casBroj > ukupniBrojCasova) {
+          for (let i = 0; i < casBroj - ukupniBrojCasova; i++) {
+            podaci.odeljenja[odeljenjeIndex].raspored[dan][casBroj - 1] = {
+              cas: casBroj,
+              predmet: "",
+            };
+          }
+        }
+        podaci.odeljenja[odeljenjeIndex].raspored[dan][casBroj - 1].predmet =
           newValue;
         localStorage.setItem("podaci", JSON.stringify(podaci));
+        /*if (
+          "predmet" in podaci.odeljenja[odeljenjeIndex].raspored[dan][casBroj]
+        ) {
+          podaci.odeljenja[odeljenjeIndex].raspored[dan][casBroj].predmet =
+            newValue;
+        } else {
+          podaci.odeljenja[odeljenjeIndex].raspored[dan][casBroj] = {
+            predmet: newValue,
+            cas: casBroj,
+          };
+        }*/
       };
 
       input.addEventListener("blur", finish);
