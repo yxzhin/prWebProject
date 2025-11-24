@@ -17,6 +17,26 @@ const boje = {
   geografija: "rosybrown",
   likovno: "cyan",
 };
+const vremena = {
+  1: {
+    1: "7:15-8:00",
+    2: "8:05-8:50",
+    3: "8:55-9:40",
+    4: "10:00-10:45",
+    5: "10:50-11:35",
+    6: "11:40-12:25",
+    7: "12:30-13:15",
+  },
+  2: {
+    1: "14:00-14:45",
+    2: "14:50-15:35",
+    3: "15:55-16:40",
+    4: "16:45-17:30",
+    5: "17:35-18:20",
+    6: "18:25-19:10",
+    7: "19:15-20:00",
+  },
+};
 let podaci = null;
 
 function ucitajPodatke() {
@@ -202,7 +222,8 @@ function prikaziTabelu(smena) {
 
   // popunjavanje redova
   for (let casBroj = 1; casBroj <= maxCasova; casBroj++) {
-    html += `<tr><td>${casBroj}</td>`;
+    const vreme = vremena[smena.id][casBroj];
+    html += `<tr><td>${casBroj} (${vreme})</td>`;
 
     dani.forEach((dan) => {
       const sviCasovi = smena.raspored[dan];
