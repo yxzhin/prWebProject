@@ -146,14 +146,19 @@ function prikaziTabelu(odeljenje) {
 
       const cas = sviCasovi.find((c) => c.cas === casBroj);
       const id = `${dan}-${casBroj}`;
-
+      const tema = localStorage.getItem("tema") === "dark" ? "#444" : "#f0f0f0";
+      const backgroundColor =
+        cas != null && cas.predmet.toLowerCase().replace(" ", "") in boje
+          ? boje[cas.predmet.toLowerCase().replace(" ", "")]
+          : tema;
+      const predmet = cas != null ? cas.predmet : "";
+      html += `<td class="promenljivo" id=${id} style='background-color:${backgroundColor}'>${predmet}</td>`;
+      /*
       if (cas) {
-        html += `<td class="promenljivo" id=${id} style='background-color:${
-          boje[cas.predmet.toLowerCase().replace(" ", "")]
-        }'>${cas.predmet}</td>`;
+        html += `<td class="promenljivo" id=${id} style='background-color:${backgroundColor}'>${cas.predmet}</td>`;
       } else {
         html += `<td class="nista promenljivo" id=${id}></td>`;
-      }
+      }*/
     });
 
     html += `</tr>`;
@@ -184,8 +189,10 @@ function dodajPromenljivost() {
       const finish = () => {
         const newValue = input.value.trim();
         this.textContent = newValue; //|| oldValue;
+        const tema =
+          localStorage.getItem("tema") === "dark" ? "#444" : "#f0f0f0";
         this.style.backgroundColor =
-          boje[newValue.toLowerCase().replace(" ", "")] || "#fafafa";
+          boje[newValue.toLowerCase().replace(" ", "")] || tema;
         const odeljenjeID = localStorage.getItem("odeljenjeID");
         const odeljenjeIndex = podaci.odeljenja.indexOf(
           podaci.odeljenja.find((od) => od.id == odeljenjeID)
@@ -239,6 +246,7 @@ function promeniTemu() {
     "tema",
     document.body.classList.contains("dark") ? "dark" : "light"
   );
+  prikaziPodatke();
 }
 
 function primeniTemu() {
